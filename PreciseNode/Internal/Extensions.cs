@@ -58,7 +58,7 @@ namespace RegexKSP {
 				mins = (long) Math.Floor((UT / 60) % 60);
 				hour = (long) Math.Floor((UT / (60 * 60)) % 6);
 				day = (long) Math.Floor((UT / (6 * 60 * 60)) % 426) + 1;  // Ensure we don't get a "Day 0" here.
-				year = (long) Math.Floor(UT / (426 * 24 * 60 * 60)) + 1; // Ensure we don't get a "Year 0" here.
+				year = (long) Math.Floor(UT / (426 * 6 * 60 * 60)) + 1; // Ensure we don't get a "Year 0" here.
 			} else {
 				secs = (long) Math.Floor(UT % 60);
 				mins = (long) Math.Floor((UT / 60) % 60);
