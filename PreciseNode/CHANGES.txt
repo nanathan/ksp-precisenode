@@ -22,8 +22,11 @@ Open Node: O
 
 1.2.0, 2015-11-10
 - Updated for KSP 1.0.5.
-- Added intuitive behavior for maneuver node handles. This can be enabled in the options window.
-  The intuitive behavior is most useful for normal/anti-normal burns (ie. inclination changes.)
+- Added intuitive behavior for maneuver node handles (code by TechnocratiK.) This can be enabled
+  in the options window. The intuitive behavior is most useful for normal/anti-normal burns
+  (ie. inclination changes.)
+- Orbit information now also shows the inclination.
+- Fixed a bug in the Kerbin/Earth time conversion.
 - Disabled KSP compatibility check for the time being.
 
 1.1.3, 2015-05-02
