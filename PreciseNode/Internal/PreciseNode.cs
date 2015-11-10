@@ -359,6 +359,7 @@ namespace RegexKSP {
 						// output the apoapsis and periapsis of our projected orbit.
 						GUIParts.drawDoubleLabel("Apoapsis:", 100, curState.node.nextPatch.ApA.formatMeters(), 100);
 						GUIParts.drawDoubleLabel("Periapsis:", 100, curState.node.nextPatch.PeA.formatMeters(), 130);
+						GUIParts.drawDoubleLabel("Inclination:", 100, Math.Abs(curState.node.nextPatch.inclination).ToString("0.##") + "°", 150);
 					}
 				}
 			}
