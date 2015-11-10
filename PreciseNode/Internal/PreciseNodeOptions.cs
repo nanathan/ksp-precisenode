@@ -48,6 +48,7 @@ namespace RegexKSP {
 		internal bool showUTControls;
 		internal bool showEAngle = true;
 		internal bool showOrbitInfo;
+		internal bool intuitiveManeuverGizmos;
 #if NODE_CLEANUP
 		internal bool removeUsedNodes;
 #endif

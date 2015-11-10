@@ -50,19 +50,17 @@ namespace RegexKSP {
 			ADDWIDGET
 		};
 
-		internal static int VERSION = 8;
+		internal static int VERSION = 9;
 
 		private static readonly Color PROGRADE_COLOR = new Color(86, 144, 0);
 		private static readonly Color NORMAL_COLOR = new Color(151, 0, 162);
 		private static readonly Color RADIAL_COLOR = new Color(0, 136, 130);
 
-		internal PluginConfiguration config;
-
 		private PreciseNodeOptions options = new PreciseNodeOptions();
 		private NodeManager curState = new NodeManager();
 		private List<Action> scheduledForLayout = new List<Action>();
+		private IntuitiveNodeGizmosManager intuitiveNodeGizmosManager;
 
-		private bool configLoaded;
 		private bool conicsLoaded;
 		private bool shown = true;
 		private bool showTimeNext;
@@ -86,13 +84,19 @@ namespace RegexKSP {
 		internal void Awake() {
 			CancelInvoke();
 			loadConfig();
-		}
+
+			intuitiveNodeGizmosManager = new IntuitiveNodeGizmosManager(options);
+        }
 
 		/// <summary>
 		/// Overridden function from MonoBehavior
 		/// </summary>
 		internal void OnDisable() {
 			saveConfig();
+		}
+
+		internal void OnDestroy() {
+			intuitiveNodeGizmosManager.OnDestroy();
 		}
 
 		/// <summary>
@@ -117,6 +121,8 @@ namespace RegexKSP {
                 }
                 processKeyInput();
 			}
+
+			intuitiveNodeGizmosManager.OnUpdate();
 		}
 
 #if NODE_CLEANUP
@@ -621,6 +627,11 @@ namespace RegexKSP {
 				options.showOrbitInfo = temp;
 				curState.resizeMainWindow = true;
 			}
+			temp = GUILayout.Toggle(options.intuitiveManeuverGizmos, "Use intuitive maneuver node handle behavior");
+			if (temp != options.intuitiveManeuverGizmos) {
+				options.intuitiveManeuverGizmos = temp;
+				curState.resizeMainWindow = true;
+			}
 #if NODE_CLEANUP
 			options.removeUsedNodes = GUILayout.Toggle(options.removeUsedNodes, "Remove used nodes");
             //TODO: Add threshold controls for removing used nodes
@@ -905,65 +916,63 @@ namespace RegexKSP {
 		/// </summary>
 		private void loadConfig() {
 			Debug.Log("Loading PreciseNode settings.");
-			if(!configLoaded) {
-				config = KSP.IO.PluginConfiguration.CreateForType<PreciseNode>(null);
-				config.load();
-				configLoaded = true;
+			PluginConfiguration config = KSP.IO.PluginConfiguration.CreateForType<PreciseNode>(null);
+			config.load();
 
-				try {
-					options.conicsMode = config.GetValue<int>("conicsMode", 3);
-					options.mainWindowPos.x = config.GetValue<int>("mainWindowX", Screen.width / 10);
-					options.mainWindowPos.y = config.GetValue<int>("mainWindowY", 20);
-					options.optionsWindowPos.x = config.GetValue<int>("optWindowX", Screen.width / 3);
-					options.optionsWindowPos.y = config.GetValue<int>("optWindowY", 20);
-					options.keymapperWindowPos.x = config.GetValue<int>("keyWindowX", Screen.width / 5);
-					options.keymapperWindowPos.y = config.GetValue<int>("keyWindowY", 20);
-					options.clockWindowPos.x = config.GetValue<int>("clockWindowX", Screen.width / 3);
-					options.clockWindowPos.y = config.GetValue<int>("clockWindowY", Screen.height / 2);
-					options.conicsWindowPos.x = config.GetValue<int>("conicsWindowX", Screen.width / 5);
-					options.conicsWindowPos.y = config.GetValue<int>("conicsWindowY", Screen.height / 2);
-					options.tripWindowPos.x = config.GetValue<int>("tripWindowX", Screen.width / 5);
-					options.tripWindowPos.y = config.GetValue<int>("tripWindowY", Screen.height / 5);
-					options.showClock = config.GetValue<bool>("showClock", false);
-					options.showEAngle = config.GetValue<bool>("showEAngle", true);
-					options.showConics = config.GetValue<bool>("showConics", true);
-					options.showConicsAlways = config.GetValue<bool>("showConicsAlways", false);
-					options.showOrbitInfo = config.GetValue<bool>("showOrbitInfo", false);
-					options.showUTControls = config.GetValue<bool>("showUTControls", false);
-					options.showManeuverPager = config.GetValue<bool>("showManeuverPager", true);
+			try {
+				options.conicsMode = config.GetValue<int>("conicsMode", 3);
+				options.mainWindowPos.x = config.GetValue<int>("mainWindowX", Screen.width / 10);
+				options.mainWindowPos.y = config.GetValue<int>("mainWindowY", 20);
+				options.optionsWindowPos.x = config.GetValue<int>("optWindowX", Screen.width / 3);
+				options.optionsWindowPos.y = config.GetValue<int>("optWindowY", 20);
+				options.keymapperWindowPos.x = config.GetValue<int>("keyWindowX", Screen.width / 5);
+				options.keymapperWindowPos.y = config.GetValue<int>("keyWindowY", 20);
+				options.clockWindowPos.x = config.GetValue<int>("clockWindowX", Screen.width / 3);
+				options.clockWindowPos.y = config.GetValue<int>("clockWindowY", Screen.height / 2);
+				options.conicsWindowPos.x = config.GetValue<int>("conicsWindowX", Screen.width / 5);
+				options.conicsWindowPos.y = config.GetValue<int>("conicsWindowY", Screen.height / 2);
+				options.tripWindowPos.x = config.GetValue<int>("tripWindowX", Screen.width / 5);
+				options.tripWindowPos.y = config.GetValue<int>("tripWindowY", Screen.height / 5);
+				options.showClock = config.GetValue<bool>("showClock", false);
+				options.showEAngle = config.GetValue<bool>("showEAngle", true);
+				options.showConics = config.GetValue<bool>("showConics", true);
+				options.showConicsAlways = config.GetValue<bool>("showConicsAlways", false);
+				options.showOrbitInfo = config.GetValue<bool>("showOrbitInfo", false);
+				options.showUTControls = config.GetValue<bool>("showUTControls", false);
+				options.showManeuverPager = config.GetValue<bool>("showManeuverPager", true);
+				options.showManeuverPager = config.GetValue<bool>("intuitiveManeuverGizmos", false);
 #if NODE_CLEANUP
-					options.removeUsedNodes = config.GetValue<bool>("removeUsedNodes", false);
-					options.usedNodeThreshold = config.GetValue<double>("usedNodeThreshold", 0.5);
+				options.removeUsedNodes = config.GetValue<bool>("removeUsedNodes", false);
+				options.usedNodeThreshold = config.GetValue<double>("usedNodeThreshold", 0.5);
 #endif
-					options.largeUTIncrement = config.GetValue<bool>("largeUTIncrement", false);
+				options.largeUTIncrement = config.GetValue<bool>("largeUTIncrement", false);
 
-					string temp = config.GetValue<String>("progInc", "Keypad8");
-					options.progInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("progDec", "Keypad5");
-					options.progDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("normInc", "Keypad9");
-					options.normInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("normDec", "Keypad7");
-					options.normDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("radiInc", "Keypad6");
-					options.radiInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("radiDec", "Keypad4");
-					options.radiDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("timeInc", "Keypad3");
-					options.timeInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("timeDec", "Keypad1");
-					options.timeDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("pageIncrement", "Keypad0");
-					options.pageIncrement = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("pageConics", "KeypadEnter");
-					options.pageConics = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("hideWindow", "P");
-					options.hideWindow = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-					temp = config.GetValue<String>("addWidget", "O");
-					options.addWidget = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
-				} catch(ArgumentException) {
-					// do nothing here, the defaults are already set
-				}
+				string temp = config.GetValue<String>("progInc", "Keypad8");
+				options.progInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("progDec", "Keypad5");
+				options.progDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("normInc", "Keypad9");
+				options.normInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("normDec", "Keypad7");
+				options.normDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("radiInc", "Keypad6");
+				options.radiInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("radiDec", "Keypad4");
+				options.radiDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("timeInc", "Keypad3");
+				options.timeInc = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("timeDec", "Keypad1");
+				options.timeDec = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("pageIncrement", "Keypad0");
+				options.pageIncrement = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("pageConics", "KeypadEnter");
+				options.pageConics = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("hideWindow", "P");
+				options.hideWindow = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+				temp = config.GetValue<String>("addWidget", "O");
+				options.addWidget = (KeyCode)Enum.Parse(typeof(KeyCode), temp);
+			} catch(ArgumentException) {
+				// do nothing here, the defaults are already set
 			}
 		}
 
@@ -972,9 +981,7 @@ namespace RegexKSP {
 		/// </summary>
 		private void saveConfig() {
 			Debug.Log("Saving PreciseNode settings.");
-			if(!configLoaded) {
-				config = KSP.IO.PluginConfiguration.CreateForType<PreciseNode>(null);
-			}
+			PluginConfiguration config = KSP.IO.PluginConfiguration.CreateForType<PreciseNode>(null);
 
 			config["conicsMode"] = options.conicsMode;
 			config["progInc"] = options.progInc.ToString();
@@ -1008,6 +1015,7 @@ namespace RegexKSP {
 			config["showOrbitInfo"] = options.showOrbitInfo;
 			config["showUTControls"] = options.showUTControls;
 			config["showManeuverPager"] = options.showManeuverPager;
+			config["intuitiveManeuverGizmos"] = options.intuitiveManeuverGizmos;
 #if NODE_CLEANUP
 			config["removeUsedNodes"] = options.removeUsedNodes;
 			config["usedNodeThreshold"] = options.usedNodeThreshold;
