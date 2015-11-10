@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("PreciseNode")]
-[assembly: AssemblyCopyright("Copyright © 2013-2014 Justin R. Bengtson, Maik Schreiber and others")]
+[assembly: AssemblyCopyright("Copyright © 2013-2015 Justin R. Bengtson, Maik Schreiber and others")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
