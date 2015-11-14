@@ -48,8 +48,9 @@ namespace RegexKSP {
 			this.UpdateIntuitiveManeuverHandlersList();
 
 			// iterate over the current handlers
-			foreach (IntuitiveNodeGizmoHandler intuitiveManeuverHandler in this.maneuverGizmoHandlers)
-				intuitiveManeuverHandler.OnUpdate();
+			for (int i = 0; i < maneuverGizmoHandlers.Count; i++) {
+				maneuverGizmoHandlers[i].OnUpdate();
+			}
 		}
 
 		internal void OnDestroy() {
@@ -58,27 +59,25 @@ namespace RegexKSP {
 		}
 
 		private void UpdateIntuitiveManeuverHandlersList() {
-			// if any maneuver nodes exist for the current vessel, attach/detach from/to them
-			if (FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes != null) {
-				foreach (ManeuverNode maneuverNode in FlightGlobals.ActiveVessel.patchedConicSolver.maneuverNodes) {
-					// if the maneuver node doesn't have a gizmo, don't attach
-					if (maneuverNode.attachedGizmo == null)
-						continue;
-
-					// only attach to new gizmos
-					bool alreadyHandled = false;
-					foreach (IntuitiveNodeGizmoHandler maneuverGizmoHandler in this.maneuverGizmoHandlers) {
-						if (maneuverNode == maneuverGizmoHandler.ManeuverNode) {
-							alreadyHandled = true;
-							break;
-						}
-					}
-
-					if (!alreadyHandled) {
-						this.maneuverGizmoHandlers.Add(new IntuitiveNodeGizmoHandler(this, maneuverNode, options));
+			PatchedConicSolver solver = NodeTools.getSolver();
+			if (solver != null) {
+				List<ManeuverNode> nodes = solver.maneuverNodes;
+				for (int i = 0; i < nodes.Count; i++) {
+					ManeuverNode node = nodes[i];
+					if ((node.attachedGizmo != null) && !isHandled(node)) {
+						this.maneuverGizmoHandlers.Add(new IntuitiveNodeGizmoHandler(this, node, options));
 					}
 				}
 			}
+		}
+
+		private bool isHandled(ManeuverNode node) {
+			for (int i = 0; i < maneuverGizmoHandlers.Count; i++) {
+				if (node == maneuverGizmoHandlers[i].ManeuverNode) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		internal void RemoveIntuitiveManeuverHandler(IntuitiveNodeGizmoHandler intuitiveManeuverHandler) {

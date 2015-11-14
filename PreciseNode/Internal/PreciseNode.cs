@@ -50,7 +50,7 @@ namespace RegexKSP {
 			ADDWIDGET
 		};
 
-		internal static int VERSION = 9;
+		internal static int VERSION = 10;
 
 		private static readonly Color PROGRADE_COLOR = new Color(86, 144, 0);
 		private static readonly Color NORMAL_COLOR = new Color(151, 0, 162);
@@ -941,7 +941,7 @@ namespace RegexKSP {
 				options.showOrbitInfo = config.GetValue<bool>("showOrbitInfo", false);
 				options.showUTControls = config.GetValue<bool>("showUTControls", false);
 				options.showManeuverPager = config.GetValue<bool>("showManeuverPager", true);
-				options.showManeuverPager = config.GetValue<bool>("intuitiveManeuverGizmos", false);
+				options.intuitiveManeuverGizmos = config.GetValue<bool>("intuitiveManeuverGizmos", false);
 #if NODE_CLEANUP
 				options.removeUsedNodes = config.GetValue<bool>("removeUsedNodes", false);
 				options.usedNodeThreshold = config.GetValue<double>("usedNodeThreshold", 0.5);
