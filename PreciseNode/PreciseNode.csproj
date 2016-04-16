@@ -58,7 +58,6 @@
     <Compile Include="Internal\Log.cs" />
     <Compile Include="Internal\NodeList.cs" />
     <Compile Include="Internal\NodeManager.cs" />
-    <Compile Include="Internal\NodeSaver.cs" />
     <Compile Include="Internal\NodeState.cs" />
     <Compile Include="Internal\NodeTools.cs" />
     <Compile Include="Internal\PreciseNodeOptions.cs" />
