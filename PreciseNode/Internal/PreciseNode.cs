@@ -523,7 +523,8 @@ namespace RegexKSP {
 				MapView.MapCamera.SetTarget(curState.node.scaledSpaceTarget);
 			}
 			GUIParts.drawButton("Del", Color.red, () => {
-				solver.RemoveManeuverNode(curState.node);
+				curState.node.RemoveSelf();
+				//solver.RemoveManeuverNode(curState.node);
 				curState.clearMemory();
 			});
 			GUI.enabled = count > 1;

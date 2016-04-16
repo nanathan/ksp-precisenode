@@ -37,8 +37,9 @@ namespace RegexKSP {
 		/// Creates a new Meneuver Node Gizmo if needed
 		/// </summary>
 		internal static void CreateNodeGizmo(this ManeuverNode node) {
-			if(node.attachedGizmo != null) { return; }
-			node.AttachGizmo(MapView.ManeuverNodePrefab, FlightGlobals.ActiveVessel.patchedConicRenderer);
+			if (node.attachedGizmo == null) {
+				node.AttachGizmo(MapView.ManeuverNodePrefab, FlightGlobals.ActiveVessel.patchedConicRenderer);
+			}
 		}
 
 		/// <summary>
