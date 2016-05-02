@@ -639,14 +639,6 @@ namespace RegexKSP {
             //TODO: Add threshold controls for removing used nodes
 #endif
 
-			if (UpdateChecker.Done && (UpdateChecker.UpdateAvailable == true)) {
-				GUILayout.Space(5);
-				Color oldColor = GUI.color;
-				GUI.color = Color.yellow;
-				GUILayout.Label("An update to this plugin is available.");
-				GUI.color = oldColor;
-			}
-
 			GUILayout.EndVertical();
 			GUI.DragWindow();
 		}

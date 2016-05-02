@@ -32,13 +32,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\Programme\KSP_1_1_0_dev\KSP_Data\Managed\Assembly-CSharp.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\KSP_1_1_2_dev\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\..\..\..\Programme\KSP_1_1_0_dev\KSP_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\KSP_1_1_2_dev\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="KSPUtil">
-      <HintPath>..\..\..\..\Programme\KSP_1_1_0_dev\KSP_Data\Managed\KSPUtil.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\KSP_1_1_2_dev\KSP_x64_Data\Managed\KSPUtil.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -47,7 +47,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\Programme\KSP_1_1_0_dev\KSP_Data\Managed\UnityEngine.dll</HintPath>
+      <HintPath>..\..\..\..\Programme\KSP_1_1_2_dev\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -62,22 +62,24 @@
     <Compile Include="Internal\NodeTools.cs" />
     <Compile Include="Internal\PreciseNodeOptions.cs" />
     <Compile Include="Internal\PreciseNode.cs" />
-    <Compile Include="Internal\UpdateChecker.cs" />
     <Compile Include="Internal\WindowId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CHANGES.txt" />
+    <Content Include="etc\MiniAVC.dll" />
     <Content Include="Parts\CBAtexture.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="etc\PreciseNode.version" />
     <None Include="LICENSE.txt" />
     <None Include="Parts\CBA.cfg" />
     <None Include="Parts\CBA.mu" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>del $(TargetDir)*.pdb $(TargetDir)UnityEngine.dll $(TargetDir)Assembly-CSharp*.dll $(TargetDir)Mono.*.dll $(TargetDir)TDx*.dll $(TargetDir)TrackIRUnity.dll $(TargetDir)KSPAssets.dll $(TargetDir)KSPUtil.dll $(TargetDir)SaveUpgradePipeline.Core.dll $(TargetDir)UnityEngine.xml $(TargetDir)UnityEngine.UI.dll $(TargetDir)Vectrosity.dll
+    <PostBuildEvent>xcopy /Y $(ProjectDir)etc\MiniAVC.dll $(TargetDir)
+del $(TargetDir)*.pdb $(TargetDir)UnityEngine.dll $(TargetDir)Assembly-CSharp*.dll $(TargetDir)Mono.*.dll $(TargetDir)TDx*.dll $(TargetDir)TrackIRUnity.dll $(TargetDir)KSPAssets.dll $(TargetDir)KSPUtil.dll $(TargetDir)SaveUpgradePipeline.Core.dll $(TargetDir)UnityEngine.xml $(TargetDir)UnityEngine.UI.dll $(TargetDir)Vectrosity.dll
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

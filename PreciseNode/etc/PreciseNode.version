@@ -1,0 +1,29 @@
+{
+	"NAME": "Precise Node",
+	"URL": "https://www.blizzy.de/precise-node/PreciseNode.version",
+	"DOWNLOAD": "http://forum.kerbalspaceprogram.com/index.php?/topic/44129-110-precise-node-122-precisely-edit-your-maneuver-nodes/",
+	"VERSION": {
+		"MAJOR": 1,
+		"MINOR": 2,
+		"PATCH": 3,
+		"BUILD": 0
+	},
+	"KSP_VERSION": {
+		"MAJOR": 1,
+		"MINOR": 1,
+		"PATCH": 2,
+		"BUILD": 0
+	},
+	"KSP_VERSION_MIN": {
+		"MAJOR": 1,
+		"MINOR": 1,
+		"PATCH": 2,
+		"BUILD": 0
+	},
+	"KSP_VERSION_MAX": {
+		"MAJOR": 1,
+		"MINOR": 1,
+		"PATCH": 2,
+		"BUILD": 0
+	}
+}
