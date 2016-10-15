@@ -21,6 +21,10 @@ Open Node: O
 
 
 
+1.2.4, 2016-10-15
+- Updated for KSP 1.2.0.
+- Please note that the 32-bit version of KSP will no longer be supported.
+
 1.2.3, 2016-05-02
 - Updated for KSP 1.1.2.
 - Now uses KSP-AVC for version checking. If KSP-AVC is not installed, the bundled
