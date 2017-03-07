@@ -349,7 +349,7 @@ namespace RegexKSP {
 		}
 
 		internal static bool isUTInsidePatch(this Orbit o, double ut) {
-			return (ut >= Planetarium.GetUniversalTime()) && (o.isClosed() || (ut <= o.EndUT));
+			return (ut >= Planetarium.GetUniversalTime()) && (o.isClosed() || (ut <= o.EndUT) || (!double.IsNaN(o.eccentricity) && !double.IsInfinity(o.eccentricity) && o.eccentricity < 1));
 		}
 
 		internal static bool isSun(this CelestialBody body) {
