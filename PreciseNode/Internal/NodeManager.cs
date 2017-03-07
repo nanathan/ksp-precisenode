@@ -84,6 +84,10 @@ namespace RegexKSP {
 			return this;
 		}
 
+		internal double currentPrograde() {
+			return curState.deltaV.z;
+		}
+
 		private void setPrograde(double d) {
 			if (d != curState.deltaV.z) {
 				curState.deltaV.z = d;
@@ -111,6 +115,10 @@ namespace RegexKSP {
 			}
 		}
 
+		internal double currentNormal() {
+			return curState.deltaV.y;
+		}
+
 		private void setNormal(double d) {
 			if (d != curState.deltaV.y) {
 				curState.deltaV.y = d;
@@ -136,6 +144,10 @@ namespace RegexKSP {
 					setNormal(d);
 				}
 			}
+		}
+
+		internal double currentRadial() {
+			return curState.deltaV.x;
 		}
 
 		private void setRadial(double d) {
@@ -218,6 +230,18 @@ namespace RegexKSP {
 
 		internal double currentMagnitude() {
 			return curState.deltaV.magnitude;
+		}
+
+		internal void addMagnitude(double d) {
+			setMagnitude(currentMagnitude() + d);
+		}
+
+		internal void setMagnitude(double d) {
+			double multiplier = d / curState.deltaV.magnitude;
+			setPrograde(multiplier * currentPrograde());
+			setNormal(multiplier * currentNormal());
+			setRadial(multiplier * currentRadial());
+			changed = true;
 		}
 
 		internal void setPeriapsis() {

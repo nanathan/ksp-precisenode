@@ -283,7 +283,7 @@ namespace RegexKSP {
 			GUILayout.EndHorizontal();
 
 			// total delta-V display
-			GUIParts.drawDoubleLabel("Total Δv:", 100, curState.currentMagnitude().ToString("0.##") + " m/s", 130);
+			drawMagnitudeControls();
 
 			drawEAngle();
 			drawEncounter(defaultColor);
@@ -500,6 +500,19 @@ namespace RegexKSP {
 				curState.addRadial(options.increment);
 			}, () => {
 				curState.addRadial(-options.increment);
+			});
+			GUILayout.EndHorizontal();
+		}
+
+		private void drawMagnitudeControls() {
+			// magnitude controls
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Total Δv:", GUILayout.Width(100));
+			GUILayout.Label(curState.currentMagnitude().ToString("0.##") + " m/s", GUILayout.Width(130));
+			GUIParts.drawPlusMinusButtons(() => {
+				curState.addMagnitude(options.increment);
+			}, () => {
+				curState.addMagnitude(-options.increment);
 			});
 			GUILayout.EndHorizontal();
 		}
