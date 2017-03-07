@@ -32,6 +32,13 @@ using KSP.IO;
 
 namespace RegexKSP {
 	internal static class GUIParts {
+		internal static void drawColored(Color bgColor, Action draw) {
+			Color defaultColor = GUI.backgroundColor;
+			GUI.backgroundColor = bgColor;
+			draw();
+			GUI.backgroundColor = defaultColor;
+		}
+
 		internal static void drawDoubleLabel(String text1, float width1, String text2, float width2) {
 			GUILayout.BeginHorizontal();
 			GUILayout.Label(text1, GUILayout.Width(width1));
@@ -69,10 +76,10 @@ namespace RegexKSP {
 			GUILayout.EndHorizontal();
 		}
 
-		internal static void drawPlusMinusButtons(Action plus, Action minus, bool plusEnabled = true, bool minusEnabled = true) {
+		internal static void drawPlusMinusButtons(Action plus, Action minus, bool plusEnabled = true, bool minusEnabled = true, string text = "+/-") {
 			bool oldEnabled = GUI.enabled;
 			GUI.enabled = plusEnabled || minusEnabled;
-			drawButton("+/-", GUI.backgroundColor, () => {
+			drawButton(text, GUI.backgroundColor, () => {
 				switch (Event.current.button) {
 					case 0:
 						if (plusEnabled) {

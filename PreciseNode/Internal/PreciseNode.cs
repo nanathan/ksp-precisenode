@@ -398,17 +398,19 @@ namespace RegexKSP {
 						curState.setUT(curState.node.patch.getEquatorialDNUT());
 					}
 				});
-				if (options.largeUTIncrement) {
-					GUI.enabled = curState.node.patch.isUTInsidePatch(currentUT - curState.node.patch.period);
-					GUIParts.drawButton("-Orb", Color.red, () => { curState.addUT(-curState.node.patch.period); });
-					GUI.enabled = curState.node.patch.isUTInsidePatch(currentUT + curState.node.patch.period);
-					GUIParts.drawButton("+Orb", Color.green, () => { curState.addUT(curState.node.patch.period); });
-				} else {
-					GUI.enabled = curState.node.patch.isUTInsidePatch(currentUT - 1000);
-					GUIParts.drawButton("-1K", Color.red, () => { curState.addUT(-1000); });
-					GUI.enabled = true;
-					GUIParts.drawButton("+1K", Color.green, () => { curState.addUT(1000); });
-				}
+				GUIParts.drawColored(Color.green, () => GUIParts.drawPlusMinusButtons(
+					() => { curState.addUT(ut_increment * 1000); },
+					() => { curState.addUT(ut_increment * -1000); },
+					true,
+					curState.node.patch.isUTInsidePatch(currentUT - ut_increment * 1000),
+					"K"));
+				double period = curState.node.patch.period * ut_increment;
+				GUIParts.drawColored(Color.green, () => GUIParts.drawPlusMinusButtons(
+					() => { curState.addUT(period); },
+					() => { curState.addUT(-period); },
+					curState.node.patch.isUTInsidePatch(currentUT + period),
+					curState.node.patch.isUTInsidePatch(currentUT - period),
+					"Orb"));
 				GUI.enabled = curState.node.hasAN(targ);
 				GUIParts.drawButton("AN", Color.cyan, () => {
 					if(targ != null) {
