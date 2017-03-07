@@ -140,6 +140,7 @@ namespace RegexKSP {
         }
 #endif
 
+		#region GUI
 		/// <summary>
 		/// Overridden function from MonoBehavior
 		/// </summary>
@@ -743,6 +744,7 @@ namespace RegexKSP {
 			GUILayout.EndVertical();
 			GUI.DragWindow();
 		}
+		#endregion
 
 		/// <summary>
 		/// Returns whether the Node Editor can be shown based on a number of global factors.
@@ -774,7 +776,7 @@ namespace RegexKSP {
 			}
 		}
 
-
+		#region KEYINPUT
 		private void doWaitForKey(String msg, Key key) {
 			ScreenMessages.PostScreenMessage(msg, 5.0f, ScreenMessageStyle.UPPER_CENTER);
 			waitForKey = true;
@@ -904,7 +906,9 @@ namespace RegexKSP {
 				curState.node.CreateNodeGizmo();
 			}
 		}
+		#endregion
 
+		#region CONFIG
 		/// <summary>
 		/// Load any saved configuration from file.
 		/// </summary>
@@ -1018,6 +1022,7 @@ namespace RegexKSP {
 
 			config.save();
 		}
-	}	
+		#endregion
+	}
 }
 
